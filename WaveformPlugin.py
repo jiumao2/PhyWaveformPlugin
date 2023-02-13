@@ -195,6 +195,9 @@ class SingleWaveformView(ManualClusteringView):
         x_start = min(self.line_x)
         x_end = max(self.line_x)
         for k in range(np.size(data, 0)):
+            if np.max(self.line_y)<np.min(data[k,:]) or np.min(self.line_y)>np.max(data[k,:]):
+                continue
+            
             for j in range(np.max([0, np.int(np.floor(x_start))]),
                            np.min([np.size(data, 1) - 1, np.int(np.ceil(x_end))])
                            ):

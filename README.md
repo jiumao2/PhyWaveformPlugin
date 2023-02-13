@@ -14,7 +14,7 @@ c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins']
 * Click Menubar -> View -> Add SingleWaveformView
 * `Ctrl + Left Click` the waveform in `WaveformView` to select the channel
 * `Ctrl + Click` to select the waveforms that intersect with the line you draw  
-*Note*: `split` action will be faster with shorter line in width.  
+*Note*: `split` action will be faster with shorter line.  
 ![](doc/SingleWaveformView.png)
 * Press `k` to split clusters or press `s` to split clusters and label the minor cluster as `noise`.  
 
