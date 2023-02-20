@@ -178,12 +178,11 @@ class SingleWaveformView(ManualClusteringView):
 
     def get_split_spike_ids(self):
         spike_ids = self.controller.get_spike_ids(self.cluster_ids[0])
-        data = self.controller.model.get_waveforms(spike_ids, [self.channel_id])
+        data = self.controller.model.get_waveforms(spike_ids, [self.channel_id]) # n_spikes, n_samples, n_channels
 
         # Load the waveforms, either from the raw data directly, or from the _phy_spikes* files.
         if data is not None:
-            data = data - np.median(data, axis=1)[:, np.newaxis, :]
-        assert data.ndim == 3  # n_spikes, n_samples, n_channels
+            data = data - np.median(data, axis=1)[:, np.newaxis, :] 
 
         # Filter the waveforms.
         if data is not None:
@@ -194,13 +193,14 @@ class SingleWaveformView(ManualClusteringView):
 
         x_start = min(self.line_x)
         x_end = max(self.line_x)
+
+        range_start = np.max([0, np.int(np.floor(x_start))])
+        range_end = np.min([np.size(data, 1) - 1, np.int(np.ceil(x_end))])
         for k in range(np.size(data, 0)):
-            if np.max(self.line_y)<np.min(data[k,:]) or np.min(self.line_y)>np.max(data[k,:]):
+            if np.max(self.line_y)<np.min(data[k,range_start:range_end+1]) or np.min(self.line_y)>np.max(data[k,range_start:range_end+1]):
                 continue
             
-            for j in range(np.max([0, np.int(np.floor(x_start))]),
-                           np.min([np.size(data, 1) - 1, np.int(np.ceil(x_end))])
-                           ):
+            for j in range(range_start, range_end):
                 if self.is_intersect(
                         np.array([self.line_x[0], self.line_y[0]]),
                         np.array([self.line_x[1], self.line_y[1]]),
