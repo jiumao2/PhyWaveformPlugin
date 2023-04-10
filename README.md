@@ -20,8 +20,12 @@ c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins']
 
 
 ## New shortcuts
-* **s**: split clusters in `SingleWaveformView` and label the minor output cluster as `noise`. `Undo` action can't undo this action.
+* **s**: split clusters in `SingleWaveformView` and label the minor output cluster as `noise`. `Undo` twice undo this action. Firstly `undo` the labelling process and secondly `undo` the splitting process.
 * **-**: defined in the `SettingsPlugin.py`. Apply the filter `ContamPct > 150`.
+* Alias **good**: defined in the `SettingsPlugin.py`. Filter good clusters.
+* Alias **mua**: defined in the `SettingsPlugin.py`. Filter mua clusters.
+* Alias **noise**: defined in the `SettingsPlugin.py`. Filter noise clusters.
+* Alias **goodmua** or **muagood**: defined in the `SettingsPlugin.py`. Filter mua and good clusters.
 
 ## About the plugins
 * `WaveformPlugin.py`: defines the `SingleWaveformView`.
