@@ -233,6 +233,16 @@ class SingleWaveformViewPlugin(IPlugin):
             connect(view.on_request_split)
             connect(view.on_select_channel)
 
+            @connect(sender=view)
+            def on_view_attached(view_, gui):
+                # NOTE: this callback function is called in SingleWaveformView.attach().
+                @view.actions.add(prompt=True, prompt_default=lambda: str(view.n_waveform))
+                def change_n_waveforms(n_waveform):
+                    """Change the number of spikes displayed in the SingleWaveformView."""
+                    view.n_waveform = n_waveform
+
+                view.actions.separator()
+
             @connect
             def on_split_noise(sender):
                 up = view.split_noise()
@@ -244,8 +254,10 @@ class SingleWaveformViewPlugin(IPlugin):
                 old_cluster_id = up.deleted[0]
                 noise_cluster_id = up.added[np.argmin([idx0_count, idx1_count])]
                 good_cluster_id = up.added[np.argmax([idx0_count, idx1_count])]
-
+                
                 controller.supervisor.label('group', 'noise', cluster_ids=[noise_cluster_id])
+                # controller.supervisor.cluster_meta.set('group', [noise_cluster_id], 'noise') # this code does not save history for undo action
+
                 controller.supervisor.select(good_cluster_id)
                 if good_cluster_id == old_cluster_id:
                     view.on_select(good_cluster_id)
