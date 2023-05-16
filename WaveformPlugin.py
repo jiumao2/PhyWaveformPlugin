@@ -3,8 +3,7 @@ from phy import IPlugin, connect
 from phy.cluster.views import ManualClusteringView  # Base class for phy views
 from phy.plot.plot import PlotCanvas
 from phy.plot.visuals import PlotVisual
-from phy.utils import emit, connect, unconnect
-
+from phy.utils import emit, connect, unconnect, Bunch
 
 class SingleWaveformView(ManualClusteringView):
     plot_canvas_class = PlotCanvas
@@ -33,9 +32,24 @@ class SingleWaveformView(ManualClusteringView):
 
         self.visual.reset_batch()
         self.cluster_ids = cluster_ids
-        self.waveform = self.controller._get_waveforms_with_n_spikes(self.cluster_ids[0], self.n_waveform)
 
-        self.channel_id = self.controller.get_best_channel(self.cluster_ids[0])
+        spike_ids = self.controller.selector(self.n_waveform, [self.cluster_ids[0]])
+        data = self.controller.model.get_waveforms(spike_ids, None) # n_spikes, n_samples, n_channels
+
+        if data is not None:
+            data = data - np.median(data, axis=1)[:, np.newaxis, :]
+        assert data.ndim == 3  # n_spikes, n_samples, n_channels
+
+        self.waveform =  Bunch(
+            data=data,
+            channel_ids=np.arange(np.size(data, 2)),
+        )
+
+        # self.channel_id = self.controller.get_best_channel(self.cluster_ids[0])
+        # Select the channel id with largest amplitude instead of using the API's method (sometimes API is wrong)
+        mean_waveform = np.mean(self.waveform.data, axis=0)
+        amplitude = [np.max(mean_waveform[:,k])-np.min(mean_waveform[:,k]) for k in range(np.size(mean_waveform, 1))]
+        self.channel_id = np.argmax(amplitude)
 
         y = self.waveform.data[:, :, self.waveform.channel_ids == self.channel_id]
         y = np.squeeze(y).transpose()
@@ -240,6 +254,11 @@ class SingleWaveformViewPlugin(IPlugin):
                 def change_n_waveforms(n_waveform):
                     """Change the number of spikes displayed in the SingleWaveformView."""
                     view.n_waveform = n_waveform
+
+                @view.actions.add(prompt=True, prompt_default=lambda: str(view.channel_id), alias='ch')
+                def change_channel_id(channel_id):
+                    """Change the channel id displayed in the SingleWaveformView."""
+                    view.on_select_channel(channel_id=channel_id)
 
                 view.actions.separator()
 
