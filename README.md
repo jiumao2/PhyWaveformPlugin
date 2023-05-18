@@ -1,13 +1,16 @@
 # Phy Waveform Plugin: remove strange waveforms in [phy](https://github.com/cortex-lab/phy)
 
 ## How to use it  
-1. Create a myplugins.py file in `C:/Users/UserName/.phy/plugins/` and copy-paste the code from a plugin example on the GitHub repository  
-2. Edit `C:/Users/UserName/.phy/phy_config.py`, and specify the plugin names to load in the GUI:  
+1. Download the plugin files `SettingsPlugin.py` and `WaveformPlugin.py` on the GitHub repository. 
+2. Edit `C:/Users/UserName/.phy/phy_config.py`(create one if you do not have the directory `C:/Users/UserName/.phy`), and specify the plugin names to load in the GUI:  
 ```python
+from phy import IPlugin
+
 c = get_config()
 c.TemplateGUI.plugins = ['SingleWaveformViewPlugin', 'SettingsPlugin']  # list of plugin names to load in the TemplateGUI
-c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins']
+c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plugins are located
 ```
+3. Open phy. The plugins will be loaded automatically.
 
 ### Single Waveform View
 ![](doc/phy.png)
