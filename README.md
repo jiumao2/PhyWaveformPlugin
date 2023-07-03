@@ -7,7 +7,7 @@
 from phy import IPlugin
 
 c = get_config()
-c.TemplateGUI.plugins = ['SingleWaveformViewPlugin', 'SettingsPlugin']  # list of plugin names to load in the TemplateGUI
+c.TemplateGUI.plugins = ['SingleWaveformViewPlugin', 'SettingsPlugin', 'PSTHPlugin']  # list of plugin names to load in the TemplateGUI
 c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plugins are located
 ```
 3. Open phy. The plugins will be loaded automatically.
@@ -21,6 +21,11 @@ c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plu
 ![](doc/SingleWaveformView.png)
 * Press `k` to split clusters or press `s` to split clusters and label the minor cluster as `noise`.  
 
+### PSTH View
+![](doc/PSTH.png)
+* Click Menubar -> View -> Add PSTHView
+* Click the menu bar to set the events, t_pre, t_post and bin width.
+*Note*: This plugin is only for certain BlackRock recordings.
 
 ## New shortcuts
 * **s**: split clusters in `SingleWaveformView.py` and label the minor output cluster as `noise`. `Undo` twice undo this action. Firstly `undo` the labelling process and secondly `undo` the splitting process.
@@ -30,10 +35,12 @@ c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plu
 * Alias **mua**: defined in the `SettingsPlugin.py`. Filter mua clusters.
 * Alias **noise**: defined in the `SettingsPlugin.py`. Filter noise clusters.
 * Alias **goodmua** or **muagood**: defined in the `SettingsPlugin.py`. Filter mua and good clusters.
+* Alias **e**: defined in the `PSTHView.py`. Change to the next event in PSTHView.
 
 ## About the plugins
 * `WaveformPlugin.py`: defines the `SingleWaveformView`.
 * `SettingsPlugin.py`: changes the columns in `ClusterView` and adds shortcut `-`.
+* `PSTHPlugin.py`: defines the `PSTHView`.
 
 ## References
 * [Customization in Phy](https://github.com/cortex-lab/phy/blob/master/docs/customization.md)

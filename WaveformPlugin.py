@@ -38,6 +38,11 @@ class SingleWaveformView(ManualClusteringView):
 
         if data is not None:
             data = data - np.median(data, axis=1)[:, np.newaxis, :]
+            
+        # Filter the waveforms.
+        if data is not None:
+            data = self.controller.raw_data_filter.apply(data, axis=1)
+
         assert data.ndim == 3  # n_spikes, n_samples, n_channels
 
         self.waveform =  Bunch(
@@ -116,8 +121,16 @@ class SingleWaveformView(ManualClusteringView):
 
         data = np.squeeze(self.waveform.data[:, :, self.waveform.channel_ids == self.channel_id])
         labels = np.zeros(np.size(data, 0))
+        x_start = min(self.line_x)
+        x_end = max(self.line_x)
+
+        range_start = np.max([0, np.int(np.floor(x_start))])
+        range_end = np.min([np.size(data, 1) - 1, np.int(np.ceil(x_end))])
         for k in range(np.size(data, 0)):
-            for j in range(np.size(data, 1) - 1):
+            if np.max(self.line_y)<np.min(data[k,range_start:range_end+1]) or np.min(self.line_y)>np.max(data[k,range_start:range_end+1]):
+                continue
+            
+            for j in range(range_start, range_end):
                 if self.is_intersect(
                         np.array([self.line_x[0], self.line_y[0]]),
                         np.array([self.line_x[1], self.line_y[1]]),
@@ -254,6 +267,7 @@ class SingleWaveformViewPlugin(IPlugin):
                 def change_n_waveforms(n_waveform):
                     """Change the number of spikes displayed in the SingleWaveformView."""
                     view.n_waveform = n_waveform
+                    view.on_select(view.channel_id)
 
                 @view.actions.add(prompt=True, prompt_default=lambda: str(view.channel_id), alias='ch')
                 def change_channel_id(channel_id):
