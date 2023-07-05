@@ -27,6 +27,15 @@ c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plu
 * Click the menu bar to set the events, t_pre, t_post and bin width.
 *Note*: This plugin is only for certain BlackRock recordings.
 
+#### How to use PSTH View for any recordings?  
+* You should create `events.csv` and `event_labels.csv` in the data directory.  
+* The event times should match to spike times.
+
+| Filename | Notes |
+| :------------- | :------------ |
+|events.csv      |Each row is the timings of events|
+|event_labels.csv|Each element is the name of that event|
+
 ## New shortcuts
 * **s**: split clusters in `SingleWaveformView.py` and label the minor output cluster as `noise`. `Undo` twice undo this action. Firstly `undo` the labelling process and secondly `undo` the splitting process.
 * **-**: defined in the `SettingsPlugin.py`. Apply the filter `ContamPct > 150`.

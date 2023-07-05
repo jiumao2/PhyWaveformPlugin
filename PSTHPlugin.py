@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from phy import IPlugin, connect
 from phy.cluster.views import ManualClusteringView  # Base class for phy views
 from phy.plot.plot import PlotCanvas
@@ -20,22 +21,28 @@ class PSTHView(ManualClusteringView):
         self.binwidth = 50 # ms
         self.point_size = 2
 
-        self.event_labels = ['press', 'release', 'reward']
+        # self.event_labels = ['press', 'release', 'reward']
         self.event_idx = 0
         
         # Try to load the events file
-        if not os.path.exists('events.npy'):
+        if not os.path.exists('events.csv') or not os.path.exists('event_labels.csv'):
             dir_nev = '..'
             if not os.path.exists(os.path.join(dir_nev, 'datafile001.nev')):
                 dir_nev = os.path.join('..', '..')
             
             if not os.path.exists(os.path.join(dir_nev, 'datafile001.nev')):
-                print('Events.npy not found and cannot be created, please close PSTHview')
+                print('events.csv not found and cannot be created, please close PSTHview')
                 return
 
             self.read_events(dir_nev)
+        else:
+            print('Found events.csv and event_labels.csv')
 
-        self.event_times = np.squeeze(np.load('events.npy', allow_pickle=True))
+        events = pd.read_csv('events.csv',header=None)
+        events_numpy = events.to_numpy()
+        self.event_times = [events_numpy[i,~np.isnan(events_numpy[i,:])] for i in range(np.size(events_numpy,0))]
+
+        self.event_labels = pd.read_csv('event_labels.csv',header=None).to_numpy()[0]
 
         self.canvas.set_layout('stacked', n_plots=2)
         self.raster = ScatterVisual()
@@ -58,9 +65,10 @@ class PSTHView(ManualClusteringView):
 
         block_index.sort()
         print('Block index:', block_index)
-        print('Creating events.npy...')
+        print('Creating events.csv and event_labels.csv...')
 
         events = [[],[],[]]
+        event_labels = ['press', 'release', 'reward']
         event_idx = [5,2,3]
         t0 = 0
         for idx_block in range(len(block_index)):
@@ -89,10 +97,11 @@ class PSTHView(ManualClusteringView):
 
         for idx in range(len(event_idx)):
             events[idx] = np.array(events[idx])/30000 # in seconds
-            print(self.event_labels[idx], 'number', ':', len(events[idx]))
+            print(event_labels[idx], 'number', ':', len(events[idx]))
 
-        np.save('events.npy', events)
-        print('Saved to events.npy')
+        pd.DataFrame(events).to_csv('events.csv',header=None,index=None)
+        pd.DataFrame(event_labels).to_csv('event_labels.csv',header=None,index=None)
+        print('Saved to events.csv and event_labels.csv')
 
 
     def on_select(self, cluster_ids, **kwargs):
