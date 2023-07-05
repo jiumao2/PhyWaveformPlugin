@@ -42,7 +42,11 @@ class PSTHView(ManualClusteringView):
         events_numpy = events.to_numpy()
         self.event_times = [events_numpy[i,~np.isnan(events_numpy[i,:])] for i in range(np.size(events_numpy,0))]
 
-        self.event_labels = pd.read_csv('event_labels.csv',header=None).to_numpy()[0]
+        self.event_labels = pd.read_csv('event_labels.csv',header=None).to_numpy().tolist()
+        if len(self.event_labels[0])>1:
+            self.event_labels = self.event_labels[0]
+        else:
+            self.event_labels = [self.event_labels[i][0] for i in range(len(self.event_labels))]
 
         self.canvas.set_layout('stacked', n_plots=2)
         self.raster = ScatterVisual()

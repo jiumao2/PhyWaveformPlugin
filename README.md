@@ -2,15 +2,23 @@
 
 ## How to use it  
 1. Download the plugin files `SettingsPlugin.py` and `WaveformPlugin.py` on the GitHub repository. 
-2. Edit `C:/Users/UserName/.phy/phy_config.py`(create one if you do not have the directory `C:/Users/UserName/.phy`), and specify the plugin names to load in the GUI:  
+2. Install `pandas` and `neo`.  
+
+```
+conda activate phy
+pip install pandas
+pip install neo
+```  
+
+3. Edit `C:/Users/UserName/.phy/phy_config.py`(create one if you do not have the directory `C:/Users/UserName/.phy`), and specify the plugin names to load in the GUI:  
 ```python
 from phy import IPlugin
 
 c = get_config()
-c.TemplateGUI.plugins = ['SingleWaveformViewPlugin', 'SettingsPlugin', 'PSTHPlugin']  # list of plugin names to load in the TemplateGUI
+c.TemplateGUI.plugins = ['SingleWaveformViewPlugin', 'SettingsPlugin', 'PSTHViewPlugin']  # list of plugin names to load in the TemplateGUI
 c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plugins are located
 ```
-3. Open phy. The plugins will be loaded automatically.
+4. Open phy. The plugins will be loaded automatically.
 
 ### Single Waveform View
 ![](doc/phy.png)
