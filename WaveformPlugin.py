@@ -45,7 +45,7 @@ class SingleWaveformView(ManualClusteringView):
 
         assert data.ndim == 3  # n_spikes, n_samples, n_channels
 
-        self.waveform =  Bunch(
+        self.waveform = Bunch(
             data=data,
             channel_ids=np.arange(np.size(data, 2)),
         )

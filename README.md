@@ -15,7 +15,7 @@ pip install neo
 from phy import IPlugin
 
 c = get_config()
-c.TemplateGUI.plugins = ['SingleWaveformViewPlugin', 'SettingsPlugin', 'PSTHViewPlugin']  # list of plugin names to load in the TemplateGUI
+c.TemplateGUI.plugins = ['SingleWaveformViewPlugin', 'SettingsPlugin', 'PSTHViewPlugin', 'CorrelationViewPlugin', 'SimilarityViewPlugin']  # list of plugin names to load in the TemplateGUI
 c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plugins are located
 ```
 4. Open phy. The plugins will be loaded automatically.
@@ -34,6 +34,18 @@ c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plu
 * Click Menubar -> View -> Add PSTHView
 * Click the menu bar to set the events, t_pre, t_post and bin width.
 *Note*: This plugin is only for certain BlackRock recordings.
+
+### Correlation View
+* The correlation between clusters. High correlation implys that one of the two clusters is misclassified by Kilosort and should be removed.
+* Click Menubar -> View -> Add CorrelationView
+* Click the menu bar to set the events, t_pre, t_post and bin width.
+* `Ctrl + Click` to select the point and the corresponding clusters will be selected in `ClusterView`.
+
+### Similarity View
+* The similarity between clusters. High similarity implys that the two clusters are similar and should be merged.
+* Click Menubar -> View -> Add CorrelationView
+* Click the menu bar to set the events, t_pre, t_post and bin width.
+* `Ctrl + Click` to select the point and the corresponding clusters will be selected in `ClusterView`.
 
 #### How to use PSTH View for any recordings?  
 * You should create `events.csv` and `event_labels.csv` in the data directory.  
@@ -58,6 +70,8 @@ c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plu
 * `WaveformPlugin.py`: defines the `SingleWaveformView`.
 * `SettingsPlugin.py`: changes the columns in `ClusterView` and adds shortcut `-`.
 * `PSTHPlugin.py`: defines the `PSTHView`.
+* `CorrelationPlugin.py`: defines the `CorrelationView`.
+* `SimilarityPlugin.py`: defines the `SimilarityView`.
 
 ## References
 * [Customization in Phy](https://github.com/cortex-lab/phy/blob/master/docs/customization.md)
