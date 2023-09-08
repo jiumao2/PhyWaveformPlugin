@@ -43,8 +43,9 @@ c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plu
 
 ### Similarity View
 * The similarity between clusters. High similarity implys that the two clusters are similar and should be merged.
-* Click Menubar -> View -> Add CorrelationView
-* Click the menu bar to set the events, t_pre, t_post and bin width.
+* Click Menubar -> View -> Add SimilarityMatrixView
+* Click the menu bar to set the point size and types of similarity. Similarity of waveform / autocorrelogram / inter-spike interval is supported.
+* Click `Change dim` in the menu would change the dimension of the view. Dimension 2 would generate the scatter plot of the two types of similarity from all pairs of good and mua clusters.
 * `Ctrl + Click` to select the point and the corresponding clusters will be selected in `ClusterView`.
 
 #### How to use PSTH View for any recordings?  
@@ -71,7 +72,7 @@ c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plu
 * `SettingsPlugin.py`: changes the columns in `ClusterView` and adds shortcut `-`.
 * `PSTHPlugin.py`: defines the `PSTHView`.
 * `CorrelationPlugin.py`: defines the `CorrelationView`.
-* `SimilarityPlugin.py`: defines the `SimilarityView`.
+* `SimilarityPlugin.py`: defines the `SimilarityMatrixView`.
 
 ## References
 * [Customization in Phy](https://github.com/cortex-lab/phy/blob/master/docs/customization.md)

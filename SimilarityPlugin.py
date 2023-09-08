@@ -7,11 +7,11 @@ from phy.utils import emit, connect, unconnect, Bunch
 import matplotlib.pyplot as plt
 import scipy.signal as signal
 
-class SimilarityView(ManualClusteringView):
+class SimilarityMatrixView(ManualClusteringView):
     plot_canvas_class = PlotCanvas
 
     def __init__(self, controller):
-        super(SimilarityView, self).__init__()
+        super(SimilarityMatrixView, self).__init__()
         self.controller = controller
         self.colormap = plt.colormaps['plasma'].colors
         self.point_size = 50
@@ -143,15 +143,14 @@ class SimilarityView(ManualClusteringView):
             self.refresh_figure_dim2()
 
     def refresh_figure_dim1(self):
-        self.visual.reset_batch()
-        self.text.reset_batch()
-
         self.similarity_matrix = self.similarity_matrix_all[self.typeIndex]
         if self.similarity_matrix is None:
-            self.canvas.update_visual(self.visual)
-            self.canvas.update()
-            print('No similarity matrix found')
+            self.get_similarity_matrix()
+            self.refresh_figure_dim1()
             return
+        
+        self.visual.reset_batch()
+        self.text.reset_batch()
         
         x_plot = []
         y_plot = []
@@ -179,18 +178,24 @@ class SimilarityView(ManualClusteringView):
         self.canvas.update()
     
     def refresh_figure_dim2(self):
-        self.visual.reset_batch()
-        self.text.reset_batch()
-
         self.similarity_matrix1 = self.similarity_matrix_all[self.typeIndexDim2[0]]
         self.similarity_matrix2 = self.similarity_matrix_all[self.typeIndexDim2[1]]
-        if self.similarity_matrix1 is None or self.similarity_matrix2 is None:
-            self.canvas.update_visual(self.visual)
-            self.canvas.update()
-            print('Similarity matrix not found')
+        if self.similarity_matrix1 is None:
+            self.typeIndex = self.typeIndexDim2[0]
+            self.get_similarity_matrix()
+            self.refresh_figure_dim2()
             return
         
-        cluster_id_x= []
+        if self.similarity_matrix2 is None:
+            self.typeIndex = self.typeIndexDim2[1]
+            self.get_similarity_matrix()
+            self.refresh_figure_dim2()
+            return
+
+        self.visual.reset_batch()
+        self.text.reset_batch()
+        
+        cluster_id_x = []
         cluster_id_y = []
         x_plot = []
         y_plot = []
@@ -274,7 +279,7 @@ class SimilarityViewPlugin(IPlugin):
     def attach_to_controller(self, controller):
         def create_similarity_view():
             """A function that creates and returns a view."""
-            view = SimilarityView(controller)
+            view = SimilarityMatrixView(controller)
 
             @connect(sender=view)
             def on_view_attached(view_, gui):
@@ -308,6 +313,7 @@ class SimilarityViewPlugin(IPlugin):
                 @view.actions.add(prompt=True, prompt_default=lambda: str(view.typeIndexDim2))
                 def change_type_dim2(typeIndex):
                     """Change the type displayed in the 2-dimension SimilarityView (Enter '0,1' or '0,2' or '1,2')."""
+                    print('Type index:', typeIndex)
                     view.typeIndexDim2 = typeIndex
                     view.refresh_figure()
 
@@ -315,5 +321,5 @@ class SimilarityViewPlugin(IPlugin):
 
             return view
 
-        controller.view_creator['SimilarityView'] = create_similarity_view
+        controller.view_creator['SimilarityMatrixView'] = create_similarity_view
 
