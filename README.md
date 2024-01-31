@@ -1,7 +1,7 @@
 # Phy Waveform Plugin: remove strange waveforms in [phy](https://github.com/cortex-lab/phy)
 
 ## How to use it  
-1. Download the plugin files `SettingsPlugin.py` and `WaveformPlugin.py` on the GitHub repository. 
+1. Download the plugin files `SettingsPlugin.py`, `WaveformPlugin.py`, `PSTHPlugin.py`, `CorrelationPlugin.py`, `SimilarityPlugin.py`on the GitHub repository. 
 2. Install `pandas` and `neo`.  
 
 ```
