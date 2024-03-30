@@ -35,6 +35,15 @@ c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plu
 * Click the menu bar to set the events, t_pre, t_post and bin width.
 *Note*: This plugin is only for certain BlackRock recordings.
 
+#### How to use PSTH View for any recordings?  
+* You should create `events.csv` and `event_labels.csv` in the data directory.  
+* The event times should match to spike times.
+
+| Filename | Notes |
+| :------------- | :------------ |
+|events.csv      |Each row is the timings of events|
+|event_labels.csv|Each element is the name of that event|  
+
 ### Correlation View
 * The correlation between clusters. High correlation implys that one of the two clusters is misclassified by Kilosort and should be removed.
 * Click Menubar -> View -> Add CorrelationView
@@ -47,15 +56,6 @@ c.Plugins.dirs = [r'C:\Users\jiumao\.phy\plugins'] # the directory where the plu
 * Click the menu bar to set the point size and types of similarity. Similarity of waveform / autocorrelogram / inter-spike interval is supported.
 * Click `Change dim` in the menu would change the dimension of the view. Dimension 2 would generate the scatter plot of the two types of similarity from all pairs of good and mua clusters.
 * `Ctrl + Click` to select the point and the corresponding clusters will be selected in `ClusterView`.
-
-#### How to use PSTH View for any recordings?  
-* You should create `events.csv` and `event_labels.csv` in the data directory.  
-* The event times should match to spike times.
-
-| Filename | Notes |
-| :------------- | :------------ |
-|events.csv      |Each row is the timings of events|
-|event_labels.csv|Each element is the name of that event|
 
 ## New shortcuts
 * **s**: split clusters in `SingleWaveformView.py` and label the minor output cluster as `noise`. `Undo` twice undo this action. Firstly `undo` the labelling process and secondly `undo` the splitting process.
