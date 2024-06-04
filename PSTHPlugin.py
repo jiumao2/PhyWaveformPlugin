@@ -71,9 +71,9 @@ class PSTHView(ManualClusteringView):
         print('Block index:', block_index)
         print('Creating events.csv and event_labels.csv...')
 
-        events = [[],[],[]]
-        event_labels = ['press', 'release', 'reward']
-        event_idx = [5,2,3]
+        events = [[],[],[],[]]
+        event_labels = ['press', 'trigger', 'release', 'reward']
+        event_idx = [6,0,3,4]
         t0 = 0
         for idx_block in range(len(block_index)):
             print('Reading from', os.path.join(dir_nev, 'datafile00'+str(block_index[idx_block])+'.nev'),'...')
@@ -85,10 +85,10 @@ class PSTHView(ManualClusteringView):
             timestamps = t_event[0]
             data_raw = t_event[2].astype(int)
 
-            parsed_data = np.zeros((len(timestamps),6))
+            parsed_data = np.zeros((len(timestamps),7))
             for k in range(len(timestamps)):
-                temp = '{:0>6}'.format(str(bin(data_raw[k]))[-6:])
-                for j in range(6):
+                temp = '{:0>7}'.format(str(bin(data_raw[k]))[-7:])
+                for j in range(7):
                     parsed_data[k,j] = int(temp[j])
 
             for idx in range(len(event_idx)):
