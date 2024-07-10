@@ -47,11 +47,11 @@ class CorrelationView(ManualClusteringView):
                     correlation_matrix[k,j]=1
                     continue
                 
-                st1 = np.int32(spike_times[k]*1000/bin_width)
+                st1 = np.int64(spike_times[k]*1000/bin_width)
                 s1 = np.zeros(np.max(st1)+1)
                 s1[st1] = 1
 
-                st2 = np.int32(spike_times[j]*1000/bin_width)
+                st2 = np.int64(spike_times[j]*1000/bin_width)
                 s2 = np.zeros(np.max(st2)+1)
                 s2[st2] = 1
 
@@ -79,7 +79,7 @@ class CorrelationView(ManualClusteringView):
             idx = 0
         else:
             n_colors = len(self.colormap)
-            idx = np.int(np.floor(corr*(n_colors-1)))
+            idx = np.int64(np.floor(corr*(n_colors-1)))
             if idx<0:
                 idx = 0
             elif idx >= n_colors:

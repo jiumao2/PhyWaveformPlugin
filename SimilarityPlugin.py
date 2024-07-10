@@ -73,7 +73,7 @@ class SimilarityMatrixView(ManualClusteringView):
         elif self.typeIndex == 1:
             cross_corr = []
             for k in range(len(self.cluster_ids)):
-                st1 = np.int32(spike_times[k]*1000)
+                st1 = np.int64(spike_times[k]*1000)
                 s1 = np.zeros(np.max(st1)+1)
                 s1[st1] = 1
                 s2 = s1.copy()
@@ -122,7 +122,7 @@ class SimilarityMatrixView(ManualClusteringView):
             idx = 0
         else:
             n_colors = len(self.colormap)
-            idx = np.int(np.floor(corr*(n_colors-1)))
+            idx = np.int64(np.floor(corr*(n_colors-1)))
             if idx<0:
                 idx = 0
             elif idx >= n_colors:
